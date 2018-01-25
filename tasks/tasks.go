@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/mikedata/go-data-source-monitor/models"
@@ -21,7 +22,7 @@ type TaskAPI struct {
 }
 
 // Make sure its a valid task and has appropriate accompanying information
-func validateTask(task *models.AddTask) error {
+func validateTask(task *models.Task) error {
 
 	if task.Interval.Hours == 0 && task.Interval.Minutes == 0 {
 		return errors.New("You must specify a valid interval to create a new task")
@@ -51,7 +52,7 @@ func (api *TaskAPI) Add(w http.ResponseWriter, r *http.Request) {
 		log.Fatal("Error reading response.body.", err, nil)
 	}
 
-	var task *models.AddTask
+	var task *models.Task
 
 	err = json.Unmarshal(bytes, &task)
 	if err != nil {
@@ -66,6 +67,9 @@ func (api *TaskAPI) Add(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 		return
 	}
+
+	// Set last_check as now
+	task.LastChecked = time.Now()
 
 	err = api.DataStore.AddTask(task)
 	if err != nil {

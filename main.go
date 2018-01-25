@@ -35,7 +35,7 @@ func main() {
   log.Printf("Listening to Mongo on: %s", mongo.URI)
 
   // ---- Start Task Monitoring ---
-  log.Printf("Beginning Task Montioring")
+  log.Printf("Beginning Task Monitoring")
   go cron.Start(mongo)
 
   // ---- Create and start API ----

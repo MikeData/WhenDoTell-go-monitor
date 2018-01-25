@@ -36,7 +36,7 @@ func (m *Mongo) Init() (session *mgo.Session, err error) {
 
 
 // Add a single monitoring task
-func (m *Mongo) AddTask(task *models.AddTask) error {
+func (m *Mongo) AddTask(task *models.Task) error {
 
   s := m.Session.Copy()
   defer s.Close()
@@ -48,4 +48,20 @@ func (m *Mongo) AddTask(task *models.AddTask) error {
 
   return nil
 
+}
+
+
+// Get all tasks from Mongo
+func (m *Mongo) GetAllTasks() ([]*models.Task, error) {
+
+  s := m.Session.Copy()
+  defer s.Close()
+
+  var allData []*models.Task
+  err := s.DB(m.Database).C(m.Collection).Find(nil).All(&allData)
+	if err != nil {
+		return nil, err
+  }
+
+  return allData, nil
 }
