@@ -30,7 +30,6 @@ func CreateAPI(host string, bindAddr string, m mongo.Mongo) {
   srv := &http.Server{
         Handler:      api.Router,
         Addr:         bindAddr,
-        // Good practice: enforce timeouts for servers you create!
         WriteTimeout: 15 * time.Second,
         ReadTimeout:  15 * time.Second,
     }

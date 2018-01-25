@@ -4,6 +4,7 @@ import (
   "github.com/mikedata/go-data-source-monitor/api"
   "github.com/mikedata/go-data-source-monitor/config"
   "github.com/mikedata/go-data-source-monitor/mongo"
+  "github.com/mikedata/go-data-source-monitor/cron"
 
   "log"
 )
@@ -11,6 +12,7 @@ import (
 
 func main() {
 
+  // ---- Config & Mongo ----
   cfg, err := config.Get()
 	if err != nil {
 		log.Fatal("Failed to get config.")
@@ -30,8 +32,13 @@ func main() {
 
   mongo.Session = session
 
-  log.Printf("Attempting to connect to Mongo on: %s", mongo.URI)
+  log.Printf("Listening to Mongo on: %s", mongo.URI)
 
+  // ---- Start Task Monitoring ---
+  log.Printf("Beginning Task Montioring")
+  go cron.Start(mongo)
+
+  // ---- Create and start API ----
   api.CreateAPI(cfg.APIURL, cfg.BindAddr, *mongo)
 
 }

@@ -21,15 +21,25 @@ type TaskAPI struct {
 }
 
 // Make sure its a valid task and has appropriate accompanying information
-func validateTask(task *models.AddTask) (reason string, err error) {
+func validateTask(task *models.AddTask) error {
+
+	if task.Interval.Hours == 0 && task.Interval.Minutes == 0 {
+		return errors.New("You must specify a valid interval to create a new task")
+	}
 
 	if task.Task == models.TaskPageHasChanged {
 
 		_, err := url.ParseRequestURI(task.URL)
-		return "Failed POST to task. Invalid URL. Must be properly formed, i.e 'http://www.google.com/'", err
+		if err != nil {
+			return errors.New("Failed POST to task. Invalid URL. Must be properly formed, i.e 'http://www.google.com/'")
+		}
 
+	} else {
+		return errors.New("warning: unknown task has passed validation")
 	}
-	return "Unknown task has passed validation.", errors.New("N/A")
+
+	// everything fine
+	return nil
 }
 
 // Add lets you PUT a single task via the API
@@ -49,15 +59,24 @@ func (api *TaskAPI) Add(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Validate the task being requested
-	issue, err := validateTask(task)
+	err = validateTask(task)
 	if err != nil {
 		w.WriteHeader(400)
-		w.Write([]byte(issue))
-		log.Printf(issue)
+		w.Write([]byte(err.Error()))
+		log.Print(err)
 		return
 	}
 
-	api.DataStore.AddTask(task)
+	err = api.DataStore.AddTask(task)
+	if err != nil {
+		w.WriteHeader(404)
+		w.Write([]byte("Error writing to database.")) // TODO crap
+		log.Printf("Failed write to Mongo.")          // TODO crap
+	}
+
+	complete := "Successfully created task " + task.Name
+	log.Print(complete)
+	w.Write([]byte(complete))
 
 }
 

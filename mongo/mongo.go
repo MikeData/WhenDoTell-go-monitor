@@ -5,7 +5,6 @@ import (
   "gopkg.in/mgo.v2"
   "time"
   "errors"
-  "log"
 )
 
 // Mongo represents a simplistic MongoDB configuration.
@@ -37,14 +36,16 @@ func (m *Mongo) Init() (session *mgo.Session, err error) {
 
 
 // Add a single monitoring task
-func (m *Mongo) AddTask(task *models.AddTask) {
+func (m *Mongo) AddTask(task *models.AddTask) error {
 
   s := m.Session.Copy()
   defer s.Close()
 
   err := s.DB(m.Database).C(m.Collection).Insert(task)
   if err != nil {
-    log.Fatal("Could not update new monitor task to mongo", err)
+    return err
   }
+
+  return nil
 
 }
