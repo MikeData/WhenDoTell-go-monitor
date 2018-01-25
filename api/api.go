@@ -23,7 +23,6 @@ func CreateAPI(host string, bindAddr string, m mongo.Mongo) {
 	}
 
   api.Router.HandleFunc("/", api.Test).Methods("GET")
-
   api.Router.HandleFunc("/tasks", api.Add).Methods("POST")
 
 
@@ -38,8 +37,5 @@ func CreateAPI(host string, bindAddr string, m mongo.Mongo) {
 
   log.Printf("Creating API on: %s", bindAddr)
   log.Fatal(srv.ListenAndServe())
-
-  // ---- Server ----
-
 
 }
