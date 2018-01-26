@@ -13,8 +13,7 @@ func Start(m *mongo.Mongo) {
 
 	for {
 
-		// Minus the minimum unit we're measuring by or infinte updates
-		currentTime := time.Now().Add(time.Duration(1 * time.Minute))
+		currentTime := time.Now()
 
 		tasks, err := m.GetAllTasks()
 		if err != nil {
@@ -22,11 +21,15 @@ func Start(m *mongo.Mongo) {
 		}
 
 		for i := range tasks {
-			nextTask := tasks[i].LastChecked.Add(time.Minute * time.Duration(tasks[i].Interval.Minutes))
+			nextTask := tasks[i].LastChecked.Add(time.Duration(tasks[i].Interval.Minutes) * time.Minute)
 			if currentTime.After(nextTask) {
 				log.Print(tasks[i].Name)
 				tasks[i].LastChecked = time.Now()
 			}
+
+			// sleep for the minimum time measure we're using
+			time.Sleep(1 * time.Minute)
+
 		}
 
 	}
