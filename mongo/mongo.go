@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/mikedata/go-data-source-monitor/models"
+	"github.com/mikedata/whendotell-go-monitor/models"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )

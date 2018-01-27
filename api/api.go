@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/mikedata/go-data-source-monitor/mongo"
-	"github.com/mikedata/go-data-source-monitor/tasks"
+	"github.com/mikedata/whendotell-go-monitor/mongo"
+	"github.com/mikedata/whendotell-go-monitor/tasks"
 )
 
 // CreateDatasetAPI manages all the routes configured to API

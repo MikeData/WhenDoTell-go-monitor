@@ -17,6 +17,7 @@ type Task struct {
 	Interval    *Interval `bson:"interval,omitempty"          json:"interval,omitempty"`
 	URL         string    `bson:"url,omitempty"               json:"url,omitempty"`
 	LastChecked time.Time `bson:"last_checked"                json:"last_checked"`
+	Hash        string    `bson:"hash,omitempty"             json:"hash,omitempty"`
 }
 
 // Interval between running tasks
@@ -30,4 +31,5 @@ type OptionsTaskPageHasChanged struct {
 	ID   string `bson:"id,omitempty"                json:"id,omitempty"`
 	URL  string `bson:"url,omitempty"               json:"url,omitempty"`
 	Name string `bson:"name,omitempty"              json:"name,omitempty"` // for checking tasks go into the correct queue
+	Hash string `bson:"hash"                        json:"hash"`
 }

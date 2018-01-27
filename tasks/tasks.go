@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/mikedata/go-data-source-monitor/models"
-	"github.com/mikedata/go-data-source-monitor/mongo"
+	"github.com/mikedata/whendotell-go-monitor/models"
+	"github.com/mikedata/whendotell-go-monitor/mongo"
 	"github.com/nu7hatch/gouuid"
 )
 

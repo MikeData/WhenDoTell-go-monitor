@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/go-redis/redis"
-	"github.com/mikedata/go-data-source-monitor/models"
-	"github.com/mikedata/go-data-source-monitor/mongo"
+	"github.com/mikedata/whendotell-go-monitor/models"
+	"github.com/mikedata/whendotell-go-monitor/mongo"
 )
 
 // Start monitoring
@@ -48,6 +48,7 @@ func produceTaskPageHasChanged(r *redis.Client, task *models.Task) {
 		URL:  task.URL,
 		Name: task.Name,
 		ID:   task.ID,
+		Hash: task.Hash,
 	}
 
 	details, err := json.Marshal(*context)
@@ -57,7 +58,7 @@ func produceTaskPageHasChanged(r *redis.Client, task *models.Task) {
 	}
 
 	// Send the update to redis
-	err = r.Set(task.Task, details, 0).Err()
+	err = r.RPush(task.Task, details, 0).Err()
 	if err != nil {
 		panic(err)
 	}

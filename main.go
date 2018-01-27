@@ -2,10 +2,10 @@ package main
 
 import (
 	"github.com/go-redis/redis"
-	"github.com/mikedata/go-data-source-monitor/api"
-	"github.com/mikedata/go-data-source-monitor/config"
-	"github.com/mikedata/go-data-source-monitor/cron"
-	"github.com/mikedata/go-data-source-monitor/mongo"
+	"github.com/mikedata/whendotell-go-monitor/api"
+	"github.com/mikedata/whendotell-go-monitor/config"
+	"github.com/mikedata/whendotell-go-monitor/cron"
+	"github.com/mikedata/whendotell-go-monitor/mongo"
 
 	"log"
 )
