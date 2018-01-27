@@ -5,11 +5,12 @@ import (
 
 	"time"
 
+	"github.com/go-redis/redis"
 	"github.com/mikedata/go-data-source-monitor/mongo"
 )
 
 // Start monitoring
-func Start(m *mongo.Mongo) {
+func Start(m *mongo.Mongo, r *redis.Client) {
 
 	for {
 
