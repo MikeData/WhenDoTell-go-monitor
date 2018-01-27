@@ -47,6 +47,7 @@ func produceTaskPageHasChanged(r *redis.Client, task *models.Task) {
 	context := &models.OptionsTaskPageHasChanged{
 		URL:  task.URL,
 		Name: task.Name,
+		ID:   task.ID,
 	}
 
 	details, err := json.Marshal(*context)
@@ -61,5 +62,5 @@ func produceTaskPageHasChanged(r *redis.Client, task *models.Task) {
 		panic(err)
 	}
 
-	log.Print("Successfully Queued task: ''" + task.Task + "'' with ID: '" + task.ID + "'")
+	log.Print("Successfully Queued task: '" + task.Task + "' name '" + task.Name + "' with ID: '" + task.ID + "'")
 }

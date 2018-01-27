@@ -57,9 +57,10 @@ func (api *TaskAPI) Add(w http.ResponseWriter, r *http.Request) {
 
 	err = json.Unmarshal(bytes, &task)
 	if err != nil {
-		log.Fatal("Failing to model models.AddTask resource based on request", err)
+		log.Print("Failing to model models.AddTask resource based on request: ", err)
 		w.WriteHeader(400)
 		w.Write([]byte("Cannot unmarshall your json request"))
+		return
 	}
 
 	// Validate the task being requested
@@ -92,7 +93,7 @@ func (api *TaskAPI) Add(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	complete := "Successfully created task ''" + task.Task + "' as task type '" + task.Name + "'"
+	complete := "Successfully created task ''" + task.Task + "' as task name '" + task.Name + "'"
 	log.Print(complete)
 	w.Write([]byte(complete))
 

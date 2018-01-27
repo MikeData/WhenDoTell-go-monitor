@@ -27,7 +27,7 @@ type Interval struct {
 
 // OptionsTaskPageHasChanged contains the json options that'll be sent to redis regarding this task
 type OptionsTaskPageHasChanged struct {
-	ID   string `bson:"name,omitempty"              json:"name,omitempty"`
+	ID   string `bson:"id,omitempty"                json:"id,omitempty"`
 	URL  string `bson:"url,omitempty"               json:"url,omitempty"`
 	Name string `bson:"name,omitempty"              json:"name,omitempty"` // for checking tasks go into the correct queue
 }
