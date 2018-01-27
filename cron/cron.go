@@ -1,11 +1,13 @@
 package cron
 
 import (
+	"encoding/json"
 	"log"
 
 	"time"
 
 	"github.com/go-redis/redis"
+	"github.com/mikedata/go-data-source-monitor/models"
 	"github.com/mikedata/go-data-source-monitor/mongo"
 )
 
@@ -23,8 +25,13 @@ func Start(m *mongo.Mongo, r *redis.Client) {
 
 		for i := range tasks {
 			nextTask := tasks[i].LastChecked.Add(time.Duration(tasks[i].Interval.Minutes) * time.Minute)
+
 			if currentTime.After(nextTask) {
-				log.Print(tasks[i].Name)
+
+				if tasks[i].Task == models.TaskPageHasChanged {
+					produceTaskPageHasChanged(r, tasks[i])
+				}
+
 				tasks[i].LastChecked = time.Now()
 			}
 
@@ -37,6 +44,22 @@ func Start(m *mongo.Mongo, r *redis.Client) {
 
 }
 
-func makeDuration() {
+func produceTaskPageHasChanged(r *redis.Client, task *models.Task) {
 
+	context := &models.OptionsTaskPageHasChanged{
+		URL:  task.URL,
+		Name: task.Name,
+	}
+
+	details, err := json.Marshal(*context)
+	if err != nil {
+		log.Print("Failing to unmarshall task for: "+task.Task, err)
+		return
+	}
+
+	// Send the update to redis
+	err = r.Set(task.Task, details, 0).Err()
+	if err != nil {
+		panic(err)
+	}
 }

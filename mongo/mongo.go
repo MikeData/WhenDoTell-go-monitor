@@ -1,23 +1,23 @@
 package mongo
 
 import (
-  "github.com/mikedata/go-data-source-monitor/models"
-  "gopkg.in/mgo.v2"
-  "time"
-  "errors"
+	"errors"
+	"time"
+
+	"github.com/mikedata/go-data-source-monitor/models"
+	"gopkg.in/mgo.v2"
 )
 
 // Mongo represents a simplistic MongoDB configuration.
 type Mongo struct {
-	Collection         string
-	Database           string
-	APIURL             string
-	Session            *mgo.Session
-	URI                string
-	lastPingTime       time.Time
-	lastPingResult     error
+	Collection     string
+	Database       string
+	APIURL         string
+	Session        *mgo.Session
+	URI            string
+	lastPingTime   time.Time
+	lastPingResult error
 }
-
 
 // Init creates a new mgo.Session with a strong consistency and a write mode of "majority".
 func (m *Mongo) Init() (session *mgo.Session, err error) {
@@ -34,34 +34,32 @@ func (m *Mongo) Init() (session *mgo.Session, err error) {
 	return session, nil
 }
 
-
 // Add a single monitoring task
 func (m *Mongo) AddTask(task *models.Task) error {
 
-  s := m.Session.Copy()
-  defer s.Close()
+	s := m.Session.Copy()
+	defer s.Close()
 
-  err := s.DB(m.Database).C(m.Collection).Insert(task)
-  if err != nil {
-    return err
-  }
+	err := s.DB(m.Database).C(m.Collection).Insert(task)
+	if err != nil {
+		return err
+	}
 
-  return nil
+	return nil
 
 }
-
 
 // Get all tasks from Mongo
 func (m *Mongo) GetAllTasks() ([]*models.Task, error) {
 
-  s := m.Session.Copy()
-  defer s.Close()
+	s := m.Session.Copy()
+	defer s.Close()
 
-  var allData []*models.Task
-  err := s.DB(m.Database).C(m.Collection).Find(nil).All(&allData)
+	var allData []*models.Task
+	err := s.DB(m.Database).C(m.Collection).Find(nil).All(&allData)
 	if err != nil {
 		return nil, err
-  }
+	}
 
-  return allData, nil
+	return allData, nil
 }
