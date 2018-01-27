@@ -35,11 +35,9 @@ func Start(m *mongo.Mongo, r *redis.Client) {
 				tasks[i].LastChecked = time.Now()
 			}
 
-			// sleep for the minimum time measure we're using
-			time.Sleep(1 * time.Minute)
-
 		}
-
+		// Write the updated tmask.Lastchecked times back to Mongo
+		m.UpdateLastChecked(tasks)
 	}
 
 }

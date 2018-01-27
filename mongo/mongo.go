@@ -2,10 +2,12 @@ package mongo
 
 import (
 	"errors"
+	"log"
 	"time"
 
 	"github.com/mikedata/go-data-source-monitor/models"
 	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 // Mongo represents a simplistic MongoDB configuration.
@@ -62,4 +64,21 @@ func (m *Mongo) GetAllTasks() ([]*models.Task, error) {
 	}
 
 	return allData, nil
+}
+
+// UpdateLastChecked updates the time EVERY task was last checked/added to queue
+func (m *Mongo) UpdateLastChecked(tasks []*models.Task) {
+
+	s := m.Session.Copy()
+	defer s.Close()
+
+	for i := range tasks {
+
+		_, err := s.DB(m.Database).C(m.Collection).Upsert(bson.M{"id": tasks[i].ID}, bson.M{"$set": &tasks[i]})
+		if err != nil {
+			log.Fatal("Failed Mongo Upsert for task: " + tasks[i].ID)
+		}
+
+	}
+
 }
