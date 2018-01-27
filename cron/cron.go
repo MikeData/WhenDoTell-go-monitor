@@ -62,4 +62,6 @@ func produceTaskPageHasChanged(r *redis.Client, task *models.Task) {
 	if err != nil {
 		panic(err)
 	}
+
+	log.Print("Successfully Queued task: ''" + task.Task + "'' with ID: '" + task.ID + "'")
 }

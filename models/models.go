@@ -11,6 +11,7 @@ const (
 
 // Task represents a resource or "thing to monitor"
 type Task struct {
+	ID          string    `bson:"id,omitempty"                json:"id,omitempty"`
 	Name        string    `bson:"name,omitempty"              json:"name,omitempty"`
 	Task        string    `bson:"task,omitempty"              json:"task,omitempty"`
 	Interval    *Interval `bson:"interval,omitempty"          json:"interval,omitempty"`
@@ -26,6 +27,7 @@ type Interval struct {
 
 // OptionsTaskPageHasChanged contains the json options that'll be sent to redis regarding this task
 type OptionsTaskPageHasChanged struct {
+	ID   string `bson:"name,omitempty"              json:"name,omitempty"`
 	URL  string `bson:"url,omitempty"               json:"url,omitempty"`
 	Name string `bson:"name,omitempty"              json:"name,omitempty"` // for checking tasks go into the correct queue
 }

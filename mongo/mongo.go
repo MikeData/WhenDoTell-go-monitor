@@ -34,7 +34,7 @@ func (m *Mongo) Init() (session *mgo.Session, err error) {
 	return session, nil
 }
 
-// Add a single monitoring task
+// AddTask adds a single monitoring task
 func (m *Mongo) AddTask(task *models.Task) error {
 
 	s := m.Session.Copy()
@@ -49,7 +49,7 @@ func (m *Mongo) AddTask(task *models.Task) error {
 
 }
 
-// Get all tasks from Mongo
+// GetAllTasks gets all tasks from Mongo
 func (m *Mongo) GetAllTasks() ([]*models.Task, error) {
 
 	s := m.Session.Copy()
